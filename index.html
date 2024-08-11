@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área de Trabalho Windows 10 Pro - Tema Escuro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="imgs/perfil-2.png" type="image/x-icon">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-spinner {
+            border: 5px solid #333;
+            border-top: 5px solid rgb(209, 85, 28);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #fff;
+            font-size: 18px;
+        }
+        .loading-user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .loading-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #333;
+            margin-bottom: 10px;
+        }
+        .loading-username {
+            color: #fff;
+            font-size: 16px;
+        }
+        .desktop {
+            background-image: url('/imgs/wallpaper-4.jpg');
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+            display: none;
+        }
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background-color: rgba(32, 32, 32, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+        .start-button {
+            width: 40px;
+            height: 40px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg');
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-left: 10px;
+            cursor: pointer;
+            filter: invert(1);
+        }
+        .icons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: grid;
+            grid-gap: 10px;
+        }
+        .icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .icon:hover {
+            background-color: rgba(209, 85, 28, 0.2);
+        }
+        .icon i {
+            color: rgb(209, 85, 28);
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .clock {
+            color: white;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            background-color: rgb(209, 85, 28);
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .modal-content {
+            padding: 20px;
+            color: #ddd;
+        }
+        .fechar {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .fechar:hover {
+            color: #f1f1f1;
+        }
+        .taskbar-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        .taskbar-icon {
+            margin: 0 10px;
+            color: rgb(209, 85, 28);
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .taskbar-icon:hover,
+        .taskbar-icon:active,
+        .taskbar-icon:focus {
+            color: rgb(209, 85, 28);
+        }
+        /* Estilos responsivos para Moto G5 Play */
+        @media screen and (max-width: 360px) {
+            .desktop {
+                background-size: cover;
+                background-position: center;
+            }
+            
+            .icons {
+                top: 5px;
+                left: 5px;
+                grid-gap: 5px;
+            }
+            
+            .icon {
+                width: 50px;
+                height: 50px;
+                font-size: 10px;
+            }
+            
+            .icon i {
+                font-size: 18px;
+                margin-bottom: 3px;
+            }
+            
+            .taskbar {
+                height: 30px;
+            }
+            
+            .start-button {
+                width: 30px;
+                height: 30px;
+                margin-left: 5px;
+            }
+            
+            .taskbar-icons {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding: 0 5px;
+            }
+            
+            .taskbar-icon {
+                font-size: 16px;
+                margin: 0 5px;
+            }
+            
+            .clock {
+                font-size: 12px;
+                margin-right: 5px;
+            }
+            
+            .modal {
+                width: 90%;
+                max-width: 320px;
+            }
+            
+            .modal-header h2 {
+                font-size: 14px;
+            }
+            
+            .modal-content {
+                padding: 10px;
+                font-size: 12px;
+            }
+            
+            .fechar {
+                font-size: 24px;
+            }
+        }
+
+        /* Estilos para redimensionamento */
+        .resizable {
+            position: absolute;
+            border: 1px solid #333;
+            background-color: rgba(32, 32, 32, 0.9);
+            min-width: 200px;
+            min-height: 150px;
+        }
+        
+        .resizable .resizers {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #4286f4;
+            box-sizing: border-box;
+        }
+        
+        .resizable .resizer {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #4286f4;
+            position: absolute;
+        }
+        
+        .resizable .resizer.top-left {
+            left: -5px;
+            top: -5px;
+            cursor: nwse-resize;
+        }
+        
+        .resizable .resizer.top-right {
+            right: -5px;
+            top: -5px;
+            cursor: nesw-resize;
+        }
+        
+        .resizable .resizer.bottom-left {
+            left: -5px;
+            bottom: -5px;
+            cursor: nesw-resize;
+        }
+        
+        .resizable .resizer.bottom-right {
+            right: -5px;
+            bottom: -5px;
+            cursor: nwse-resize;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text"><p>Iniciando o Windows...</p></div>
+    </div>
+
+    <div class="desktop">
+        <div class="icons">
+            <div class="icon" data-modal="sobre"><i class="fas fa-user"></i><br>Sobre Mim</div>
+            <div class="icon" data-modal="projetos"><i class="fas fa-code"></i><br>Projetos</div>
+            <div class="icon" data-modal="contato"><i class="fas fa-envelope"></i><br>Contato</div>
+        </div>
+        <div class="taskbar">
+            <a href="/"><div class="start-button"></div></a>
+            <div class="taskbar-icons">
+                <a href="https://discord.gg/ZvxZDNKPna" class="taskbar-icon"><i class="fab fa-discord"></i></a>
+                <a href="https://www.youtube.com/@phliipe" class="taskbar-icon"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.twitch.tv/phliiipe" class="taskbar-icon"><i class="fab fa-twitch"></i></a>
+                <a href="https://www.tiktok.com/@phliiipe" class="taskbar-icon"><i class="fab fa-tiktok"></i></a>
+                <a href="https://github.com/voidlyp" class="taskbar-icon"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="clock" id="clock"></div>
+        </div>
+    </div>
+
+    <div id="sobreModal" class="modal">
+        <div class="modal-header">
+            <h2>Sobre Mim</h2>
+            <span class="fechar">&times;</span>
+        </div>
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <p>👋 - Falaa Dev, eu me chamo <strong>Phelype Wellyngton</strong> mais conhecido como Lyp ou Phliipe.</p>
+                    <p>🔭 Atualmente estou no projeto da <a href="https://evolvedstudios.com" style="color: #0078d7;">EvolvedStudios</a>.</p>
+                    <p>🌱 Sempre estudando mais linguagens de programação.</p>
+                </div>
+                <img src="/imgs/perfil-2.png" alt="Foto de Perfil" style="border-radius: 10%; width: 100px; height: 100px; margin-left: 20px;">
+            </div>
+        </div>
+    </div>
+
+    <div id="contatoModal" class="modal">
+        <div class="modal-header">
+            <h2>Entre em Contato</h2>
+            <span class="fechar">&times;</span>
+        </div>
+        <div class="modal-content">
+            <p><i class="fas fa-envelope"></i> Email: <a href="mailto:cocco.phelypel@hotmail.com" style="color: #bebebe;">cocco.phelypel@hotmail.com</a></p>
+            <p><i class="fab fa-github"></i> GitHub: <a href="https://github.com/voidlyp" style="color: #bebebe;">/voidlyp</a></p>
+        </div>
+    </div>
+
+    <div id="projetosModal" class="modal">
+        <div class="modal-header">
+            <h2>Meus Projetos</h2>
+            <span class="fechar">&times;</span>
+        </div>
+        <div class="modal-content">
+            <h3>EvolvedStudios</h3>
+            <p>Projeto atual em desenvolvimento. Uma plataforma inovadora para criadores de conteúdo.</p>
+            <a href="https://evolvedstudios.com" style="color: #0078d7;">Visite o site</a>
+            
+            <h3>Outros Projetos</h3>
+            <p>Estou sempre trabalhando em novos projetos e aprendendo novas tecnologias. Fique de olho no meu GitHub para ver meus projetos mais recentes!</p>
+            <a href="https://github.com/voidlyp" style="color: #bebebe;">Veja meu GitHub</a>
+        </div>
+    </div>
+
+    <script>
+        const textosDeCarga = [
+            "Iniciando o Windows...",
+            "Configurando atualizações...",
+            "Preparando área de trabalho...",
+            "Carregando perfil do usuário..."
+        ];
+        const elementoTextoCarga = document.querySelector('.loading-text p');
+
+        function atualizarTextoCarga() {
+            for (let i = 0; i < textosDeCarga.length; i++) {
+                setTimeout(() => {
+                    elementoTextoCarga.textContent = textosDeCarga[i];
+                }, i * 5000);
+            }
+        }
+
+        // Inicia a alternância dos textos de carga
+        atualizarTextoCarga();
+        setInterval(atualizarTextoCarga, 5000);
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loading').style.display = 'none';
+                document.querySelector('.desktop').style.display = 'block';
+            }, 3000); // 3 segundos de carregamento
+        });
+
+        function atualizarRelogio() {
+            const agora = new Date();
+            const horas = agora.getHours().toString().padStart(2, '0');
+            const minutos = agora.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${horas}:${minutos}`;
+        }
+        setInterval(atualizarRelogio, 1000);
+        atualizarRelogio();
+
+        const icones = document.querySelectorAll('.icon');
+        const modais = document.querySelectorAll('.modal');
+        const botoesFechar = document.querySelectorAll('.fechar');
+
+        icones.forEach((icone) => {
+            icone.addEventListener('click', function() {
+                const idModal = this.getAttribute('data-modal');
+                if (idModal) {
+                    document.getElementById(idModal + 'Modal').style.display = 'block';
+                }
+            });
+        });
+
+        botoesFechar.forEach((botao) => {
+            botao.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', function(evento) {
+            if (evento.target.classList.contains('modal')) {
+                evento.target.style.display = 'none';
+            }
+        });
+
+        // Função para tornar os modais arrastáveis
+        function tornarArrastavel(elemento) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const cabecalho = elemento.querySelector('.modal-header');
+
+            if (cabecalho) {
+                cabecalho.onmousedown = iniciarArrasto;
+            } else {
+                elemento.onmousedown = iniciarArrasto;
+            }
+
+            function iniciarArrasto(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = pararArrasto;
+                document.onmousemove = arrastar;
+            }
+
+            function arrastar(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elemento.style.top = (elemento.offsetTop - pos2) + "px";
+                elemento.style.left = (elemento.offsetLeft - pos1) + "px";
+            }
+
+            function pararArrasto() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Aplicar a funcionalidade de arrasto a todos os modais
+        modais.forEach((modal) => {
+            tornarArrastavel(modal);
+        });
+        // Função para redimensionar os modais
+        function tornarRedimensionavel(elemento) {
+            const resizer = document.createElement('div');
+            resizer.className = 'resizer';
+            resizer.style.width = '10px';
+            resizer.style.height = '10px';
+            resizer.style.background = 'rgb(209, 85, 28)';
+            resizer.style.position = 'absolute';
+            resizer.style.right = '0';
+            resizer.style.bottom = '0';
+            resizer.style.cursor = 'se-resize';
+
+            elemento.appendChild(resizer);
+            
+            resizer.addEventListener('mousedown', iniciarRedimensionamento);
+
+            function iniciarRedimensionamento(e) {
+                e.preventDefault();
+                window.addEventListener('mousemove', redimensionar);
+                window.addEventListener('mouseup', pararRedimensionamento);
+            }
+
+            function redimensionar(e) {
+                const rect = elemento.getBoundingClientRect();
+                const novaLargura = Math.min(Math.max(200, e.clientX - rect.left), window.innerWidth - rect.left);
+                const novaAltura = Math.min(Math.max(150, e.clientY - rect.top), window.innerHeight - rect.top);
+                elemento.style.width = novaLargura + 'px';
+                elemento.style.height = novaAltura + 'px';
+            }
+
+            function pararRedimensionamento() {
+                window.removeEventListener('mousemove', redimensionar);
+                window.removeEventListener('mouseup', pararRedimensionamento);
+            }
+        }
+
+        // Aplicar a funcionalidade de redimensionamento a todos os modais
+        modais.forEach((modal) => {
+            tornarRedimensionavel(modal);
+        });
+    </script>
+</body>
+</html>
